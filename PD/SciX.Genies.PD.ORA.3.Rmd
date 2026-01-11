@@ -32,6 +32,7 @@ dir()
 
 
 ### Setting up R
+Only run this once
 ```{r setup, include=FALSE}
 install.packages('knitr', verbose=F)
 knitr::opts_chunk$set(echo = TRUE)
@@ -41,6 +42,7 @@ options(repos = r)
 ```
 
 ### Install packages 
+Only run this once
 If asked to update all/some/none just enter 'a' in the console below.
 ```{r, echo=FALSE}
 install.packages('ggplot2', verbose = F)
@@ -56,6 +58,7 @@ BiocManager::install("clusterProfiler")
 ```
 
 ### Load the packages
+Start from here every time you open RStudio to run this script
 ```{r echo=FALSE}
 library(ggplot2, verbose = F)
 library(qvalue, verbose = F)
@@ -143,8 +146,7 @@ To visualise our results, we create plots to show differentially expressed genes
 
 ```{r echo=FALSE}
 # Create a dataframe containing all of the required information
-targets = data.frame(group = gsub('_[0-9]+', '', 
-                    metadata$condition),
+targets = data.frame(group = gsub('_[0-9]+', '', metadata$condition),
                     sex = metadata$sex,
                     age = metadata$age)
 # Create the model which considers the sex, age and condition in the analysis
@@ -232,9 +234,9 @@ Note: if dotplot reactome names are overlapping and unreadable try changing "fon
 In the upset plot the number of genes which overlap multiple gene sets are shown. 
 ```{r echo=FALSE}
 gene.set <- read.gmt('../reactome.gmt')
-sigOE <- subset(lrt, abs(logFC) > 0.5 & FDR < 0.05)
+sigDE <- subset(lrt, abs(logFC) > 0.5 & FDR < 0.05)
 
-ego <- enricher(gene = sigOE$gene, 
+ego <- enricher(gene = sigDE$gene, 
          universe = lrt$gene,
          pAdjustMethod = "fdr", 
          qvalueCutoff = 0.01,
@@ -265,21 +267,20 @@ ego.df[1:5,]
 
 ### Match genes to DisGeNET and perform chi-squared test
 DisGeNET is a large database containing associations between genes and diseases from thousands of studies. 
-We have downloaded the list of genes assciated with Parkinsons Disease and we can see if our list of DE genes contains a significant overlap with these genes. 
+We have downloaded the list of genes associated with Parkinson's Disease and we can see if our list of DE genes contains a significant overlap with these genes. 
 We will also do another ORA this time with just the genes that we know are significantly differentially expressed AND associated with PD (from DisGeNET).
 ```{r echo=FALSE}
 disgene <- read.delim('disgenenet.PD.tsv', header=T, sep="\t")
 disgene <- unique(disgene$Gene)
 
-deg <- subset(lrt, abs(logFC) > 0.5 & FDR < 0.05)
-not.deg <- subset(lrt, FDR > 0.05)
-up <- subset(lrt, logFC > 0.5 & FDR < 0.05)
-down <- subset(lrt, logFC < -0.5 & FDR < 0.05)
-
 # calculate numbers for different conditions
+# disease-associated and DE 
 a <- lrt[lrt$FDR < 0.05 & abs(lrt$logFC) > 0.5 & lrt$gene %in% disgene,]$gene
+# not disease-associated and DE 
 b <- lrt[lrt$FDR < 0.05 & abs(lrt$logFC) > 0.5 & !(lrt$gene %in% disgene),]$gene
+# disease-associated and not DE
 c <- lrt[lrt$FDR > 0.05 & lrt$gene %in% disgene,]$gene
+# not disease-associated and not DE
 d <- lrt[lrt$FDR > 0.05 & !(lrt$gene %in% disgene),]$gene
 ctable <- matrix(c(length(a),length(b),length(c),length(d)),nrow=2, ncol=2)
 chisq <- chisq.test(ctable)
@@ -323,9 +324,8 @@ ego.df[1:5,]
 The number to enter as the **pathway** variable can be found as the line or row number of that pathway/term in the 'reactome.Terms.list.txt' or 'disgenenet.Terms.list.txt' files. This chunk will then plot expression of all genes in that pathway as boxplots.
 Note: if boxplot scales are being thrown off by dots(genes) with very high expression try setting "outliers = F" on line 336
 ```{r echo=FALSE}
-pathway <- 3
+pathway <- 1
 plot.genes <- unlist(strsplit(data.frame(ego)[pathway,11], '/'))
-gene.name <- 
 rownames(tmm) <- gsub('ENSG[0-9]+.[0-9]+\\|', '', rownames(tmm))
 colnames(tmm) <- gsub('[0-9]+', '', colnames(tmm))
 plot.data <- subset(tmm, rownames(tmm) %in% plot.genes)
