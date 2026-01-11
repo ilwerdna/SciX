@@ -8,10 +8,10 @@ This tutorial will follow these steps:
 2. Download the files from this github repository
 3. Move the SciX-main.zip to Desktop and unzip the file
 3. Open the .Rmd file in RStudio
-4. Perform  analysis by following  instructions in the Rmarkdown file
+4. Perform analysis by following instructions in the Rmarkdown file
 
 # Overview
-Transcriptomics is a field of biology interested in the structure and function of Ribonucleic acid (RNA). RNA is genetic information used by our cells to instruct and regulate protein production. Proteins catalyze chemical reactions as enzymes, function as signalling molecules like neurotransmitters or cytokines, and provide the structures which make up cells, tissues and organs. 
+Transcriptomics is a field of biology interested in the structure and function of ribonucleic acid (RNA). RNA is genetic information used by our cells to instruct and regulate protein production. Proteins catalyze chemical reactions as enzymes, function as signalling molecules like neurotransmitters or cytokines, and provide the structures which make up cells, tissues and organs. 
 
 By sequencing and measuring the abundance of RNA, scientists are able to infer cellular activity and the proteins being produced within tissues and organs. By comparing RNA expression levels between individuals with disease and healthy controls we can then identify the genes contributing to a disease and provide evidence for diagnostic biomarkers and drug targets. 
 
@@ -63,7 +63,8 @@ Enjoy!
 
 Lachlan Gray \
 Edited by: Helen King \
-Edited by: Ben Hanrahan
+Edited by: Ben Hanrahan \
+Edited by: Andrew Li
 
 
 
