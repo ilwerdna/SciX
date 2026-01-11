@@ -32,6 +32,7 @@ dir()
 
 
 ### Setting up R
+Only run this once
 ```{r setup, include=FALSE}
 install.packages('knitr', verbose=F)
 knitr::opts_chunk$set(echo = TRUE)
@@ -41,6 +42,7 @@ options(repos = r)
 ```
 
 ### Install packages 
+Only run this once
 If asked to update all/some/none just enter 'a' in the console below.
 ```{r, echo=FALSE}
 install.packages('ggplot2', verbose = F)
@@ -56,6 +58,7 @@ BiocManager::install("clusterProfiler")
 ```
 
 ### Load the packages
+Start from here every time you open RStudio to run this script
 ```{r echo=FALSE}
 library(ggplot2, verbose = F)
 library(qvalue, verbose = F)
@@ -143,8 +146,7 @@ To visualise our results, we create plots to show differentially expressed genes
 
 ```{r echo=FALSE}
 # Create a dataframe containing all of the required information
-targets = data.frame(group = gsub('_[0-9]+', '', 
-                    metadata$condition),
+targets = data.frame(group = gsub('_[0-9]+', '', metadata$condition),
                     sex = metadata$sex,
                     age = metadata$age)
 # Create the model which considers the sex, age and condition in the analysis
