@@ -28,6 +28,7 @@ dir()
 
 
 ### Setting up R
+Only run this once
 ```{r setup, include=FALSE}
 install.packages('knitr', verbose=F)
 knitr::opts_chunk$set(echo = TRUE)
@@ -37,6 +38,7 @@ options(repos = r)
 ```
 
 ### Install packages 
+Only run this once
 If asked to update all/some/none just enter 'a' in the console below.
 ```{r, echo=FALSE}
 install.packages('ggplot2', verbose = F)
@@ -52,6 +54,7 @@ BiocManager::install("clusterProfiler")
 ```
 
 ### Load the packages
+Start from here every time you open RStudio to run this script
 ```{r echo=FALSE}
 library(ggplot2, verbose = F)
 library(qvalue, verbose = F)
@@ -120,6 +123,7 @@ cluster.result <- cutree(cluster, k=2)
 
 # Assign sex based on dendrogram
 metadata$sex <- ifelse(cluster.result == 2, 'F', 'M')
+print(metadata)
 # sanity check of XIST expression
 XIST.expression
 
