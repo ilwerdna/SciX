@@ -24,13 +24,13 @@ find.multiple.genes <- function(data, list){
 
 ## Here is an example for working on the output from edgeR which is saved in your analysis folder ###
 # Read in file. *Change file path*
-df <- read.delim('edgeR-LRT.PD.txt')
+lrt <- read.delim('edgeR-LRT.PD.txt')
 # Find gene in result file
-find.single.gene(df, target='IGHM')
+find.single.gene(lrt, target='IGHM')
 # Filter for upregulated genes
-upregulated.genes <- filter.upregulated.genes(data=df)
+upregulated.genes <- filter.upregulated.genes(data=lrt)
 # Filter for downregulated genes
-downregulated.genes <- filter.downregulated.genes(data=df)
+downregulated.genes <- filter.downregulated.genes(data=lrt)
 # Find a single gene in the upregulated data
 find.single.gene(data=upregulated.genes, target='IL1RL1')
 # Create a list of genes and search for them in the upregulated data
@@ -46,7 +46,7 @@ volcano.plot.gene.list <- function(data, list, logfc = 0.5, fdr = 0.05) {
   
   volcano.plot <- ggplot(data) +
     geom_point(aes(x=logFC, y=-log10(FDR), colour=threshold)) +
-    geom_text_repel(data=data[data$gene %in% list,], aes(x=logFC, y=-log10(FDR), label=gene)) +
+    geom_text_repel(data=data[data$gene %in% list,], aes(x=logFC, y=-log10(FDR), label=gene), force_pull = 0.1, min.segment.length = 0.05, force=2) +
     ggtitle("Volcano Plot") +
     xlab("log2 fold change") +
     ylab("-log10 FDR") +
@@ -59,7 +59,7 @@ volcano.plot.gene.list <- function(data, list, logfc = 0.5, fdr = 0.05) {
   volcano.plot
 }
 # Example command
-volcano.plot.gene.list(df, gene.list)                                    
+volcano.plot.gene.list(lrt, gene.list)                                    
 
 ### Boxplot of specific genes ###
 # TMM is the normalised data from edgeR that we use for plotting
@@ -111,18 +111,15 @@ genes.in.pathway(ego, pathway='REACTOME_NEUTROPHIL_DEGRANULATION')
 genes.in.pathway(ego, pathway='REACTOME_SIGNALING_BY_INTERLEUKINS', list=c('IL1B', 'CXCL1'))
 
 enrichment.test <- function(data, list, logfc=0.5, fdr=0.05){
-  a <- length(which(subset(df, abs(logFC) > logfc & FDR < fdr)$gene %in% list))
-  b <- length(which(subset(df, FDR > fdr)$gene %in% list))
-  c <- length(which(!(subset(df, abs(logFC) > logfc & FDR < fdr)$gene %in% list)))
-  d <- length(which(!(subset(df, FDR > fdr)$gene %in% list)))
+  a <- length(which(subset(data, abs(logFC) > logfc & FDR < fdr)$gene %in% list))
+  b <- length(which(subset(data, FDR > fdr)$gene %in% list))
+  c <- length(which(!(subset(data, abs(logFC) > logfc & FDR < fdr)$gene %in% list)))
+  d <- length(which(!(subset(data, FDR > fdr)$gene %in% list)))
   ctable <- matrix(c(a,b,c,d), nrow=2)
-  return(chisq.test(ctable))
+  chisq <- chisq.test(ctable)
+  return(list(result = chisq, expected.values = chisq$expected, observed.values = chisq$observed, pearson.residuals = chisq$residuals, p.value = chisq$p.value))
 }
 
 # Example command to test if X chromosome genes are enriched in upregulated data 
 load('../chrX.Rdata')
-enrichment.test(df, list=rownames(chrX))
-
-
-
-
+enrichment.test(lrt, list=rownames(chrX))
