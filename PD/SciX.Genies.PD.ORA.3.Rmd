@@ -127,10 +127,10 @@ count.matrix.Y <- count.matrix %>%
 dissimilarity <- dist(count.matrix.Y[,-1], method='euclidean')
 cluster <- hclust(dissimilarity, method = 'centroid')
 plot(cluster)
-cluster.result <- cutree(cluster, k=2)
+cluster.result <- cutree(cluster, k=3)
 
 # Assign sex based on dendrogram
-metadata$sex <- ifelse(cluster.result == 2, 'F', 'M')
+metadata$sex <- ifelse(cluster.result == 1, 'F', 'M')
 # sanity check of XIST expression
 XIST.expression
 
