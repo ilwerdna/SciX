@@ -63,7 +63,7 @@ volcano.plot.gene.list(lrt, gene.list)
 
 ### Boxplot of specific genes ###
 # TMM is the normalised data from edgeR that we use for plotting
-boxplot.gene.list <- function(tmm, list){
+boxplot.gene.list <- function(tmm, gene.list){
   rownames(tmm) <- gsub('ENSG[0-9]+.[0-9]+\\|', '', rownames(tmm))
   colnames(tmm) <- gsub('[0-9]+', '', colnames(tmm))
   plot.data <- subset(tmm, rownames(tmm) %in% gene.list)
@@ -79,7 +79,7 @@ boxplot.gene.list <- function(tmm, list){
   boxplot.plot
 }
 # Example command
-boxplot.gene.list(tmm, list=gene.list)
+boxplot.gene.list(tmm, list=gene.list)   # gene.list has to be defined beforehand, and must have more than one gene, otherwise will lead to error
 
 ### Function to print the pathways identified in GSEA. Result ordered by number of genes in pathway ###
 pathways <- function(ego){
